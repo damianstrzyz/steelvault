@@ -3,17 +3,18 @@ import { createBrowserRouter } from "react-router-dom";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { RouteError } from "@/components/layout/RouteError";
 import { ProtectedRoute } from "@/features/auth/ProtectedRoute";
+import { pageLoaders } from "./pages";
 
-const CatalogPage = lazy(() => import("@/pages/CatalogPage"));
-const ProductDetailPage = lazy(() => import("@/pages/ProductDetailPage"));
-const CollectionPage = lazy(() => import("@/pages/CollectionPage"));
-const StatsPage = lazy(() => import("@/pages/StatsPage"));
-const ProfilePage = lazy(() => import("@/pages/ProfilePage"));
-const LoginPage = lazy(() => import("@/pages/LoginPage"));
-const RegisterPage = lazy(() => import("@/pages/RegisterPage"));
-const ResetPasswordPage = lazy(() => import("@/pages/ResetPasswordPage"));
-const SharedCollectionPage = lazy(() => import("@/pages/SharedCollectionPage"));
-const NotFoundPage = lazy(() => import("@/pages/NotFoundPage"));
+const CatalogPage = lazy(pageLoaders.catalog);
+const ProductDetailPage = lazy(pageLoaders.product);
+const CollectionPage = lazy(pageLoaders.collection);
+const StatsPage = lazy(pageLoaders.stats);
+const ProfilePage = lazy(pageLoaders.profile);
+const LoginPage = lazy(pageLoaders.login);
+const RegisterPage = lazy(pageLoaders.register);
+const ResetPasswordPage = lazy(pageLoaders.resetPassword);
+const SharedCollectionPage = lazy(pageLoaders.shared);
+const NotFoundPage = lazy(pageLoaders.notFound);
 
 export const router = createBrowserRouter([
   {

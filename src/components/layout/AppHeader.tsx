@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Menu } from "lucide-react";
+import { preloadPage } from "@/app/pages";
 import { navItems } from "./navItems";
 import { HeaderSearch } from "./HeaderSearch";
 import { AccountActions } from "./AccountActions";
@@ -15,8 +16,8 @@ export function AppHeader() {
         <button type="button" onClick={() => setMenuOpen(true)} aria-label="Open menu" className="grid size-11 place-items-center rounded-xl hover:bg-surface-2 md:hidden"><Menu className="size-5" /></button>
         <Link to="/" className="text-xl font-extrabold tracking-tight">Steel<span className="text-accent">vault</span></Link>
         <nav className="hidden gap-1 md:flex" aria-label="Main">
-          {navItems.map(({ to, label, end }) => (
-            <NavLink key={to} to={to} end={end} className={({ isActive }) => `rounded-lg px-3 py-2 text-sm ${isActive ? "bg-surface-2 text-fg" : "text-muted hover:text-fg"}`}>{label}</NavLink>
+          {navItems.map(({ to, label, end, preload }) => (
+            <NavLink key={to} to={to} end={end} onMouseEnter={() => preloadPage(preload)} onFocus={() => preloadPage(preload)} className={({ isActive }) => `rounded-lg px-3 py-2 text-sm ${isActive ? "bg-surface-2 text-fg" : "text-muted hover:text-fg"}`}>{label}</NavLink>
           ))}
         </nav>
         <HeaderSearch className="ml-auto hidden w-full max-w-md md:block" />

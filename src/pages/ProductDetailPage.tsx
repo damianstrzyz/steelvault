@@ -15,7 +15,7 @@ import { useProduct, useRelatedProducts } from "@/features/catalog/queries";
 import type { ProductListItem } from "@/features/catalog/types";
 import { useOwnership, type Ownership } from "@/features/collection/useOwnership";
 import { useWishlist } from "@/features/collection/useWishlist";
-import { productImageUrl } from "@/lib/storage";
+import { detailImageProps } from "@/lib/storage";
 
 function formatDate(value: string | null): string | null {
   if (!value) return null;
@@ -59,7 +59,7 @@ export default function ProductDetailPage() {
     return <EmptyState icon={PackageX} title="Product not found" description="It may have been removed or the link is incorrect." action={<Link to="/" className={buttonStyles("primary")}>Back to catalog</Link>} />;
   }
 
-  const imageUrl = productImageUrl(p.image_path);
+  const image = detailImageProps(p.image_path);
   const owned = ownership.isOwned(p.id);
   const rows: [string, ReactNode][] = [
     ["Platform", p.platform],
@@ -86,8 +86,8 @@ export default function ProductDetailPage() {
       <nav aria-label="Breadcrumb" className="mb-4 text-sm text-muted"><Link to="/" className="hover:text-fg">Catalog</Link> / <span className="text-fg">{p.name}</span></nav>
       <div className="grid gap-8 lg:grid-cols-[minmax(0,420px)_1fr]">
         <div className="aspect-[3/4] overflow-hidden rounded-2xl border border-line bg-surface-2">
-          {imageUrl
-            ? <img src={imageUrl} alt={p.name} decoding="async" className="size-full object-cover" />
+          {image
+            ? <img src={image.src} srcSet={image.srcSet} sizes="(min-width:1024px) 420px, 100vw" alt={p.name} decoding="async" fetchPriority="high" className="size-full object-cover" />
             : <div className="grid size-full place-items-center text-muted"><Disc3 className="size-16" aria-hidden="true" /></div>}
         </div>
         <div>

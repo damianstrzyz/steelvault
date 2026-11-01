@@ -34,6 +34,7 @@ export function useCollectionActions() {
     void qc.invalidateQueries({ queryKey: ["collection", "sets", userId] });
     void qc.invalidateQueries({ queryKey: ["collection", "owned", userId] });
     void qc.invalidateQueries({ queryKey: ["collection", "wishlist", userId] });
+    void qc.invalidateQueries({ queryKey: ["collection", "stats"] });
     void qc.invalidateQueries({ queryKey: ["catalog", "missing"] });
   };
   const failed = () => toast.show("Something went wrong. Please try again.", "error");
@@ -42,6 +43,7 @@ export function useCollectionActions() {
     mutationFn: ({ id, patch }: { id: string; patch: Partial<ItemPatch> }) => updateCollectionItem(userId, id, patch),
     onSuccess: (updated) => {
       qc.setQueryData<CollectionItem[]>(itemsKey, (prev) => prev?.map((i) => (i.id === updated.id ? updated : i)));
+      void qc.invalidateQueries({ queryKey: ["collection", "stats"] });
       toast.show("Changes saved", "success");
     },
     onError: failed,

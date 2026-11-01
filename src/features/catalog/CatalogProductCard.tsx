@@ -1,5 +1,6 @@
 import { ProductCard } from "@/components/product/ProductCard";
-import { productImageUrl } from "@/lib/storage";
+import { preloadPage } from "@/app/pages";
+import { cardImageProps } from "@/lib/storage";
 import type { Ownership } from "@/features/collection/useOwnership";
 import type { ProductListItem } from "./types";
 
@@ -11,7 +12,8 @@ export function CatalogProductCard({ product: p, ownership }: { product: Product
       name={p.name}
       subtitle={subtitle}
       badge={p.edition_name ?? undefined}
-      imageUrl={productImageUrl(p.image_path)}
+      {...cardImageProps(p.image_path)}
+      onPrefetch={() => preloadPage("product")}
       owned={ownership.isOwned(p.id)}
       onToggleOwned={() => ownership.toggle(p.id, p.name)}
     />

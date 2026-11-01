@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import { PAGE_SIZE, SORT_OPTIONS } from "./constants";
+import { sanitizeSearch } from "./search";
 import type { CatalogFilters, CatalogPage, CatalogSet, Category, ProductDetail, ProductListItem, RelatedProducts } from "./types";
 
 export const PRODUCT_LIST_COLUMNS =
@@ -19,11 +20,6 @@ interface MissingRow extends Omit<ProductListItem, "sets" | "categories"> {
 function fromMissingRow(row: MissingRow): ProductListItem {
   const { set_name, category_name, ...rest } = row;
   return { ...rest, sets: set_name ? { name: set_name } : null, categories: category_name ? { name: category_name } : null };
-}
-
-/** Strip characters that have meaning inside PostgREST or() filters and ILIKE patterns. */
-function sanitizeSearch(raw: string): string {
-  return raw.trim().replace(/[%_,()*\\"]/g, "").slice(0, 80);
 }
 
 export async function fetchCatalogPage(filters: CatalogFilters, page: number, source: CatalogSource = "catalog"): Promise<CatalogPage> {

@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import { Check, Pencil } from "lucide-react";
 import { ProductCard } from "@/components/product/ProductCard";
-import { productImageUrl } from "@/lib/storage";
+import { preloadPage } from "@/app/pages";
+import { cardImageProps } from "@/lib/storage";
 import { formatMoney } from "@/lib/currency";
 import { CONDITION_LABELS } from "./constants";
 import type { CollectionItem } from "./types";
@@ -27,7 +28,8 @@ export function CollectionItemCard({ item, onEdit, onMarkOwned }: Props) {
       name={p.name}
       subtitle={[p.platform, p.region, p.product_code].filter(Boolean).join(" · ")}
       badge={p.edition_name ?? undefined}
-      imageUrl={productImageUrl(p.image_path)}
+      {...cardImageProps(p.image_path)}
+      onPrefetch={() => preloadPage("product")}
       footer={
         <div className="mt-3 flex items-center justify-between gap-2">
           <span className="min-w-0 truncate text-xs text-muted">{details.join(" · ") || (owned ? "No details yet" : "On wishlist")}</span>

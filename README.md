@@ -1,18 +1,41 @@
 # Steelvault
 
-React + TypeScript + Vite + Tailwind v4 + React Router + TanStack Query + Supabase + PWA.
+Catalog and collection manager for steelbooks and video games.
+React 19, TypeScript, Vite, Tailwind v4, React Router, TanStack Query, Supabase, PWA.
 
-## Run
-    npm install
-    cp .env.example .env   # fill in Supabase URL and anon key
-    npm run dev
+## Setup
+1. `npm install`
+2. `cp .env.example .env` and fill in `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+3. In the Supabase SQL editor run every file in `supabase/migrations/` in order (0001 to 0008).
+4. Supabase > Authentication > URL Configuration: set the Site URL and add `<your origin>/login`
+   and `<your origin>/reset-password` as redirect URLs.
+5. Add catalog data: see `docs/IMPORTING_CATALOG.md`. Add exchange rates: `docs/EXCHANGE_RATES.md`.
+6. `npm run dev`
+
+## Scripts
+- `npm run dev` start the dev server
+- `npm run build` type-check and build for production
+- `npm run preview` serve the production build (use it to test the PWA)
+- `npm test` run the unit tests
+- `npm run types` generate Supabase types (needs the Supabase CLI, linked project)
 
 ## Structure
-    src/app/          App shell, providers, route table (all pages lazy-loaded)
-    src/components/   layout/ (header, footer, drawer) and ui/ (dialogs, skeletons)
-    src/features/     one folder per domain (auth now; catalog, collection, sharing, stats later)
-    src/lib/          env validation, Supabase client, query client
-    src/pages/        thin route components; logic lives in features/
+    src/app/          providers, routes, lazy page loaders
+    src/components/   layout/ and ui/ building blocks
+    src/features/     auth, catalog, collection, sharing, stats, profile (logic lives here)
+    src/pages/        thin route components
+    src/lib/          env, Supabase client, query client, storage helpers
+    supabase/         migrations, import template, demo seed
+    docs/             importing, exchange rates, PWA and hosting notes
 
-## Stages
-1 Setup (this) · 2 Database · 3 UI · 4 Catalog · 5 Auth · 6 Collection · 7 Sharing · 8 Stats · 9 PWA/perf · 10 QA
+## Security model
+- Row Level Security is on for every table. Catalog tables are read-only for users; users can only
+  read and change their own profile, collection and photos.
+- Sharing never exposes tables. Public pages call two functions that return data only when the
+  owner enabled sharing, and never return email, username, notes, tags, purchase prices or photos.
+- The service worker never caches private data (see docs/PWA_AND_PERFORMANCE.md).
+- The anon key in `.env` is public by design. Never put the service-role key in the app.
+
+## Not included yet
+Price history and market comparisons, release tracking, import/export of collections, personal
+photos of items, custom categories beyond tags, account deletion, avatars.
